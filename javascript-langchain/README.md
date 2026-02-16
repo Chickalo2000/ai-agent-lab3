@@ -1,7 +1,6 @@
-# javascript-langchain
+# LangChain AI Agent
 
-## Overview
-This project is an AI agent application built using LangChain and GitHub models. It aims to leverage the capabilities of these technologies to create intelligent agents that can perform various tasks.
+This project demonstrates the use of LangChain for building AI agents with OpenAI and community tools.
 
 ## Setup Instructions
 1. Clone the repository:

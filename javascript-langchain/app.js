@@ -1,0 +1,1 @@
+// Move this file to the root directory as app.js
