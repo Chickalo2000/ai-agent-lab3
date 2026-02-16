@@ -5,10 +5,10 @@
   "description": "AI Agent using LangChain and GitHub Models",
   "main": "app.js",
   "dependencies": {
-    "@langchain/openai": "^0.1.0",
     "@langchain/community": "^1.1.15",
-    "@langchain/core": "^0.3.80",
-    "langchain": "^0.1.0",
-    "dotenv": "^16.0.0"
+    "@langchain/core": "^1.1.24",
+    "@langchain/openai": "^1.2.7",
+    "dotenv": "^16.0.0",
+    "langchain": "^1.2.24"
   }
 }

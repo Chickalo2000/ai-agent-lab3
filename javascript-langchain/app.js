@@ -15,6 +15,7 @@ console.log('✅ Environment variables loaded successfully.');
 import { ChatOpenAI } from 'langchain/chat_models';
 import { invoke } from 'langchain/chat_models';
 
+
 // Create a ChatOpenAI instance
 const chat = new ChatOpenAI({
   model: 'openai/gpt-4o',
