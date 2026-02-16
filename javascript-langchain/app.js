@@ -13,6 +13,7 @@ console.log('✅ Environment variables loaded successfully.');
 
 // Import necessary modules
 import { ChatOpenAI } from 'langchain/chat_models';
+import { invoke } from 'langchain/chat_models';
 
 // Create a ChatOpenAI instance
 const chat = new ChatOpenAI({
@@ -31,5 +32,21 @@ async function main() {
   // Add your application logic here
 }
 
+// Define a test query
+const testQuery = 'What is 25 * 4 + 10?';
+
+// Call the model's invoke method
+async function testModel() {
+  try {
+    const response = await chat.invoke(testQuery);
+    console.log('🤔 AI Response:', response.content);
+  } catch (error) {
+    console.error('❌ Error invoking the model:', error);
+  }
+}
+
 // Execute the main function and handle errors
 main().catch(console.error);
+
+// Run the test
+await testModel();
