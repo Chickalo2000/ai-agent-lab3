@@ -13,8 +13,6 @@ console.log('✅ Environment variables loaded successfully.');
 
 // Import necessary modules
 import { ChatOpenAI } from 'langchain/chat_models';
-import { invoke } from 'langchain/chat_models';
-
 
 // Create a ChatOpenAI instance
 const chat = new ChatOpenAI({
