@@ -65,3 +65,11 @@ main().catch(console.error);
 
 // Run the test
 await testModel();
+
+// Create an agent executor
+const agentExecutor = await initializeAgentExecutorWithOptions(tools, chat, {
+  agentType: 'openai-functions',
+  verbose: true
+});
+
+console.log('🤖 Agent executor initialized successfully.');
