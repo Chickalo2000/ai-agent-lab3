@@ -13,6 +13,9 @@ console.log('✅ Environment variables loaded successfully.');
 
 // Import necessary modules
 import { ChatOpenAI } from '@langchain/openai';
+import { initializeAgentExecutorWithOptions } from 'langchain/agents';
+import { Calculator } from '@langchain/community/tools/calculator';
+import { DynamicTool } from '@langchain/core/tools';
 
 // Create a ChatOpenAI instance
 const chat = new ChatOpenAI({
