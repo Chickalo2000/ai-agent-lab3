@@ -19,11 +19,12 @@ const chat = new ChatOpenAI({
   model: 'openai/gpt-4o',
   temperature: 0, // Deterministic responses
   apiKey: process.env.GITHUB_TOKEN, // Use GITHUB_TOKEN as the apiKey
-  baseURL: 'https://models.github.ai/inference', // Configure the baseURL
-  defaultHeaders: {
-    'Accept': 'application/vnd.github+json',
-    'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
-    'X-GitHub-Api-Version': '2022-11-28'
+  configuration: {
+    baseURL: 'https://models.github.ai/inference',
+    defaultHeaders: {
+      'Accept': 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
   }
 });
 
