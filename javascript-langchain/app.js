@@ -38,11 +38,16 @@ console.log('🤖 ChatOpenAI instance created successfully.');
 // Create a tools array
 const tools = [
   new Calculator(),
-  // new DynamicTool({
-  //   name: 'get_current_time',
-  //   description: 'Returns the current date and time.',
-  //   func: async () => new Date().toString()
-  // })
+  new DynamicTool({
+    name: 'get_current_time',
+    description: 'Returns the current date and time.',
+    func: async () => new Date().toString()
+  }),
+  new DynamicTool({
+    name: 'reverse_string',
+    description: 'Reverses a string. Input should be a single string.',
+    func: async (input) => input.split('').reverse().join('')
+  })
 ];
 
 console.log('🛠️ Tools array initialized successfully.');
@@ -101,31 +106,33 @@ async function main() {
   // Add your application logic here
 }
 
-// Define a test query
-const testQuery = "Reverse the string 'Hello World'";
+// Define an array of test queries
+const testQueries = [
+  "What time is it right now?",
+  "What is 25 * 4 + 10?",
+  "Reverse the string 'Hello World'"
+];
 
-// Call the agent's invoke method
-async function testExecutor() {
+// Iterate through each query
+for (const query of testQueries) {
+  console.log(`\n🟢 Query: ${query}`);
   try {
-    const result = await agent.invoke({ 
+    const result = await agent.invoke({
       messages: [
-        new HumanMessage(testQuery)
+        new HumanMessage(query)
       ]
     });
-    // Extract the final message content
+    // Extract and print the result
     if (result.messages && result.messages.length > 0) {
       const lastMessage = result.messages[result.messages.length - 1];
-      console.log('Agent Response:', lastMessage.content || lastMessage.kwargs?.content);
+      console.log(`🟡 Result: ${lastMessage.content || lastMessage.kwargs?.content}`);
     } else {
-      console.log('Full Result:', JSON.stringify(result, null, 2));
+      console.log('⚠️ No result returned. Full response:', JSON.stringify(result, null, 2));
     }
   } catch (error) {
-    console.error('Error invoking agent:', error);
+    console.error(`🔴 Error processing query: ${query}`, error);
   }
 }
 
 // Execute the main function and handle errors
 main().catch(console.error);
-
-// Run the test
-await testExecutor();
