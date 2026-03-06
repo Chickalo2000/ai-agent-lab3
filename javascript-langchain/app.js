@@ -33,6 +33,13 @@ const chat = new ChatOpenAI({
 
 console.log('🤖 ChatOpenAI instance created successfully.');
 
+// Create a tools array
+const tools = [
+  new Calculator()
+];
+
+console.log('🛠️ Tools array initialized successfully.');
+
 // Define the main async function
 async function main() {
   console.log('🚀 Starting the LangChain AI Agent application...');
