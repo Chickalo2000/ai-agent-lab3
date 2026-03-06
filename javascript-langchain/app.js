@@ -13,9 +13,11 @@ console.log('✅ Environment variables loaded successfully.');
 
 // Import necessary modules
 import { ChatOpenAI } from '@langchain/openai';
-import { initializeAgentExecutorWithOptions } from 'langchain/agents';
 import { Calculator } from '@langchain/community/tools/calculator';
 import { DynamicTool } from '@langchain/core/tools';
+import { HumanMessage } from '@langchain/core/messages';
+import { StateGraph, START, END } from '@langchain/langgraph';
+import { ToolNode } from '@langchain/langgraph/prebuilt';
 
 // Create a ChatOpenAI instance
 const chat = new ChatOpenAI({
@@ -40,6 +42,53 @@ const tools = [
 
 console.log('🛠️ Tools array initialized successfully.');
 
+// Bind tools to the model
+const modelWithTools = chat.bindTools(tools);
+
+// Create state schema
+const Channel = {
+  messages: {
+    value: (x, y) => (y ? [...(Array.isArray(x) ? x : []), ...(Array.isArray(y) ? y : [y])] : x),
+    default: () => []
+  }
+};
+
+// Create a simple agent graph
+const graph = new StateGraph({ channels: Channel });
+
+// Define the agent node
+const agentNode = async (state) => {
+  const messages = state.messages;
+  const response = await modelWithTools.invoke(messages);
+  return { messages: [response] };
+};
+
+// Define tools node
+const toolsNode = new ToolNode(tools);
+
+// Add nodes to graph
+graph.addNode('agent', agentNode);
+graph.addNode('tools', toolsNode);
+
+// Add edges
+graph.addEdge(START, 'agent');
+graph.addConditionalEdges(
+  'agent',
+  (state) => {
+    const lastMessage = state.messages[state.messages.length - 1];
+    if (lastMessage.tool_calls && lastMessage.tool_calls.length > 0) {
+      return 'tools';
+    }
+    return END;
+  }
+);
+graph.addEdge('tools', 'agent');
+
+// Compile the graph
+const agent = graph.compile();
+
+console.log('🤖 Agent initialized successfully.');
+
 // Define the main async function
 async function main() {
   console.log('🚀 Starting the LangChain AI Agent application...');
@@ -50,13 +99,23 @@ async function main() {
 // Define a test query
 const testQuery = 'What is 25 * 4 + 10?';
 
-// Call the model's invoke method
-async function testModel() {
+// Call the agent's invoke method
+async function testExecutor() {
   try {
-    const response = await chat.invoke(testQuery);
-    console.log('Response:', response);
+    const result = await agent.invoke({ 
+      messages: [
+        new HumanMessage(testQuery)
+      ]
+    });
+    // Extract the final message content
+    if (result.messages && result.messages.length > 0) {
+      const lastMessage = result.messages[result.messages.length - 1];
+      console.log('Agent Response:', lastMessage.content || lastMessage.kwargs?.content);
+    } else {
+      console.log('Full Result:', JSON.stringify(result, null, 2));
+    }
   } catch (error) {
-    console.error('Error invoking ChatOpenAI:', error);
+    console.error('Error invoking agent:', error);
   }
 }
 
@@ -64,12 +123,4 @@ async function testModel() {
 main().catch(console.error);
 
 // Run the test
-await testModel();
-
-// Create an agent executor
-const agentExecutor = await initializeAgentExecutorWithOptions(tools, chat, {
-  agentType: 'openai-functions',
-  verbose: true
-});
-
-console.log('🤖 Agent executor initialized successfully.');
+await testExecutor();
