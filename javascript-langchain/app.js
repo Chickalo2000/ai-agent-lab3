@@ -36,7 +36,12 @@ console.log('🤖 ChatOpenAI instance created successfully.');
 
 // Create a tools array
 const tools = [
-  // new Calculator()
+  // new Calculator(),
+  new DynamicTool({
+    name: 'get_current_time',
+    description: 'Returns the current date and time.',
+    func: async () => new Date().toString()
+  })
 ];
 
 console.log('🛠️ Tools array initialized successfully.');
