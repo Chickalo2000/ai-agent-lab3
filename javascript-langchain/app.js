@@ -38,11 +38,11 @@ console.log('🤖 ChatOpenAI instance created successfully.');
 // Create a tools array
 const tools = [
   new Calculator(),
-  new DynamicTool({
-    name: 'get_current_time',
-    description: 'Returns the current date and time.',
-    func: async () => new Date().toString()
-  })
+  // new DynamicTool({
+  //   name: 'get_current_time',
+  //   description: 'Returns the current date and time.',
+  //   func: async () => new Date().toString()
+  // })
 ];
 
 console.log('🛠️ Tools array initialized successfully.');
@@ -102,7 +102,7 @@ async function main() {
 }
 
 // Define a test query
-const testQuery = 'What time is it right now?';
+const testQuery = "Reverse the string 'Hello World'";
 
 // Call the agent's invoke method
 async function testExecutor() {
