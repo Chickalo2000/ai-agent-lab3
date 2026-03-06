@@ -47,6 +47,17 @@ const tools = [
     name: 'reverse_string',
     description: 'Reverses a string. Input should be a single string.',
     func: async (input) => input.split('').reverse().join('')
+  }),
+  new DynamicTool({
+    name: 'get_weather',
+    description: 'Provides weather information for a given date. Accepts a date parameter formatted as "yyyy-MM-dd". Returns "Sunny, 72°F" if the date matches today, otherwise returns "Rainy, 55°F".',
+    func: async (input) => {
+      const today = new Date().toISOString().split('T')[0]; // Get today's date in "yyyy-MM-dd" format
+      if (input === today) {
+        return 'Sunny, 72°F';
+      }
+      return 'Rainy, 55°F';
+    }
   })
 ];
 
@@ -94,8 +105,18 @@ graph.addConditionalEdges(
 );
 graph.addEdge('tools', 'agent');
 
-// Compile the graph
-const agent = graph.compile();
+// Define a system message to instruct the AI
+const systemMessage = new HumanMessage({
+  content: "You are an AI assistant. Always respond professionally and succinctly."
+});
+
+// Add the system message to the initial state
+const initialState = {
+  messages: [systemMessage]
+};
+
+// Compile the graph with the initial state
+const agent = graph.compile(initialState);
 
 console.log('🤖 Agent initialized successfully.');
 
@@ -110,7 +131,8 @@ async function main() {
   const testQueries = [
     "What time is it right now?",
     "What is 25 * 4 + 10?",
-    "Reverse the string 'Hello World'"
+    "Reverse the string 'Hello World'",
+    "What's the weather like today?"
   ];
 
   // Iterate through each query
