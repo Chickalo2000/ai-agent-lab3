@@ -17,6 +17,7 @@ import { DynamicTool } from '@langchain/core/tools';
 import { HumanMessage } from '@langchain/core/messages';
 import { StateGraph, START, END } from '@langchain/langgraph';
 import { ToolNode } from '@langchain/langgraph/prebuilt';
+import { Calculator } from '@langchain/community/tools/calculator';
 
 // Create a ChatOpenAI instance
 const chat = new ChatOpenAI({
@@ -36,7 +37,7 @@ console.log('🤖 ChatOpenAI instance created successfully.');
 
 // Create a tools array
 const tools = [
-  // new Calculator(),
+  new Calculator(),
   new DynamicTool({
     name: 'get_current_time',
     description: 'Returns the current date and time.',
