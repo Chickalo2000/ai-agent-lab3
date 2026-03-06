@@ -103,35 +103,41 @@ console.log('🤖 Agent initialized successfully.');
 async function main() {
   console.log('🚀 Starting the LangChain AI Agent application...');
 
-  // Add your application logic here
-}
+  // Print header
+  console.log('\nRunning example queries:');
 
-// Define an array of test queries
-const testQueries = [
-  "What time is it right now?",
-  "What is 25 * 4 + 10?",
-  "Reverse the string 'Hello World'"
-];
+  // Define an array of test queries
+  const testQueries = [
+    "What time is it right now?",
+    "What is 25 * 4 + 10?",
+    "Reverse the string 'Hello World'"
+  ];
 
-// Iterate through each query
-for (const query of testQueries) {
-  console.log(`\n🟢 Query: ${query}`);
-  try {
-    const result = await agent.invoke({
-      messages: [
-        new HumanMessage(query)
-      ]
-    });
-    // Extract and print the result
-    if (result.messages && result.messages.length > 0) {
-      const lastMessage = result.messages[result.messages.length - 1];
-      console.log(`🟡 Result: ${lastMessage.content || lastMessage.kwargs?.content}`);
-    } else {
-      console.log('⚠️ No result returned. Full response:', JSON.stringify(result, null, 2));
+  // Iterate through each query
+  for (const query of testQueries) {
+    console.log(`\n${'─'.repeat(50)}`); // Separator line
+    console.log(`🟢 Query: ${query}`);
+    try {
+      const result = await agent.invoke({
+        messages: [
+          new HumanMessage(query)
+        ]
+      });
+      // Extract and print the result
+      if (result.messages && result.messages.length > 0) {
+        const lastMessage = result.messages[result.messages.length - 1];
+        console.log(`✅ Result: ${lastMessage.content || lastMessage.kwargs?.content}`);
+      } else {
+        console.log('⚠️ No result returned. Full response:', JSON.stringify(result, null, 2));
+      }
+    } catch (error) {
+      console.error(`❌ Error processing query: ${query}`, error);
     }
-  } catch (error) {
-    console.error(`🔴 Error processing query: ${query}`, error);
   }
+
+  // Print completion message
+  console.log(`\n${'─'.repeat(50)}`); // Final separator line
+  console.log('🎉 All queries processed successfully!');
 }
 
 // Execute the main function and handle errors
