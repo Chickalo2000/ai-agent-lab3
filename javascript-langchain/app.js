@@ -13,7 +13,6 @@ console.log('✅ Environment variables loaded successfully.');
 
 // Import necessary modules
 import { ChatOpenAI } from '@langchain/openai';
-import { Calculator } from '@langchain/community/tools/calculator';
 import { DynamicTool } from '@langchain/core/tools';
 import { HumanMessage } from '@langchain/core/messages';
 import { StateGraph, START, END } from '@langchain/langgraph';
@@ -37,7 +36,7 @@ console.log('🤖 ChatOpenAI instance created successfully.');
 
 // Create a tools array
 const tools = [
-  new Calculator()
+  // new Calculator()
 ];
 
 console.log('🛠️ Tools array initialized successfully.');
@@ -97,7 +96,7 @@ async function main() {
 }
 
 // Define a test query
-const testQuery = 'What is 25 * 4 + 10?';
+const testQuery = 'What time is it right now?';
 
 // Call the agent's invoke method
 async function testExecutor() {
